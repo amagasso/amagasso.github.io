@@ -150,7 +150,14 @@ def keywords(e: dict) -> list[str]:
     return [k.strip() for k in e.get("keywords", "").split(",") if k.strip()]
 
 
-def render_entry(e: dict, show_themes: bool = False) -> str:
+def render_entry(e: dict, show_themes: bool = False, thumb: bool = False) -> str:
+    image = HERE / "assets" / "papers" / f'{e["key"]}.jpg'
+    if thumb and image.exists():
+        first = f'<img class="thumb" src="assets/papers/{image.name}" alt="" loading="lazy">'
+        cls = "pub has-thumb"
+    else:
+        first = f'<span class="year">{e.get("year", "")}</span>'
+        cls = "pub"
     status = ' <span class="tag">to appear</span>' if e.get("pubstate") == "forthcoming" else ""
     note = f' <span class="note">{html.escape(latex_to_text(e["note"]))}</span>' if e.get("note") else ""
     themes = ""
@@ -158,7 +165,7 @@ def render_entry(e: dict, show_themes: bool = False) -> str:
         labels = [f'<a class="theme-tag" href="research.html#{k}">{THEMES[k]}</a>'
                   for k in keywords(e) if k in THEMES]
         themes = f'<br><span class="themes">{" ".join(labels)}</span>' if labels else ""
-    return (f'<li class="pub"><span class="year">{e.get("year", "")}</span>'
+    return (f'<li class="{cls}">{first}'
             f'<div><span class="title">{html.escape(latex_to_text(e["title"]))}</span>{status}<br>'
             f'<span class="authors">{authors(e.get("author", ""))}</span><br>'
             f'<span class="venue">{venue(e)}, {e.get("year", "")}.</span>{note}'
@@ -185,7 +192,7 @@ def selected_html(entries) -> str:
     if missing:
         raise SystemExit(f"selected publications not in the bibliography: {missing}")
     return ('<ol class="pubs compact">\n'
-            + "\n".join(render_entry(by_key[k]) for k in SELECTED) + "\n</ol>")
+            + "\n".join(render_entry(by_key[k], thumb=True) for k in SELECTED) + "\n</ol>")
 
 
 def theme_html(entries, theme: str) -> str:

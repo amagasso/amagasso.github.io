@@ -5,10 +5,12 @@
   --text: #1b2230;
   --muted: #5a6270;
   --rule: #dfe3ea;
-  --accent: #1f4e79;
-  --accent-soft: #e6eef6;
-  --tag: #8a5a00;
-  --tag-bg: #fbf1dc;
+  --accent: #2e6b34;
+  --accent-soft: #e9f3e4;
+  --tag: #7a5600;
+  --tag-bg: #fff1b8;
+  --pop: #e2522f;
+  --sun: #f2c916;
   --measure: 68ch;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
   --sans: "Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -20,15 +22,18 @@
     --text: #e3e7ee;
     --muted: #9aa3b2;
     --rule: #2a313c;
-    --accent: #8db8e3;
-    --accent-soft: #1d2a38;
-    --tag: #f0c56b;
-    --tag-bg: #2d2615;
+    --accent: #9fd18b;
+    --accent-soft: #1c2a1d;
+    --tag: #f6d36b;
+    --tag-bg: #2f2a12;
+    --pop: #ff8a65;
+    --sun: #f2c916;
   }
 }
 :root[data-theme="dark"] {
   --bg: #11151b; --surface: #171c24; --text: #e3e7ee; --muted: #9aa3b2;
-  --rule: #2a313c; --accent: #8db8e3; --accent-soft: #1d2a38; --tag: #f0c56b; --tag-bg: #2d2615;
+  --rule: #2a313c; --accent: #9fd18b; --accent-soft: #1c2a1d; --tag: #f6d36b; --tag-bg: #2f2a12;
+  --pop: #ff8a65; --sun: #f2c916;
 }
 
 * { box-sizing: border-box; }
@@ -51,12 +56,15 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-
 .nav a { color: var(--muted); text-decoration: none; font-size: 0.97rem; padding: 2px 0;
   border-bottom: 2px solid transparent; }
 .nav a:hover { color: var(--text); }
-.nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+.nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--pop); }
 
 main { padding-top: 40px; padding-bottom: 56px; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.25; text-wrap: balance; }
 h1 { font-size: 2.1rem; margin: 0 0 6px; }
-h2 { font-size: 1.35rem; margin: 40px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.35rem; margin: 40px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--rule);
+  position: relative; }
+h2::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 44px; height: 3px;
+  background: var(--pop); border-radius: 2px; }
 h3 { font-size: 1.08rem; margin: 22px 0 6px; }
 p, li { max-width: var(--measure); }
 .lede { font-size: 1.12rem; }
@@ -145,3 +153,28 @@ p, li { overflow-wrap: break-word; }
   border-radius: 999px; padding: 0 8px; }
 .theme-tag:hover { color: var(--accent); border-color: var(--accent); }
 .portrait { background: transparent; }
+
+/* colour: banners from the toy-robot photographs, and one accent per research theme */
+.banner { margin: 0 0 28px; border-radius: 12px; overflow: hidden; background: var(--accent-soft); }
+.banner img { display: block; width: 100%; height: 300px; object-fit: cover; }
+.banner.short img { height: 200px; }
+main:has(> .banner:first-child) { padding-top: 24px; }
+.theme-card { border-top: 4px solid var(--accent); }
+.theme-card:nth-child(2) { border-top-color: var(--sun); }
+.theme-card:nth-child(3) { border-top-color: var(--pop); }
+.brand::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px;
+  border-radius: 50%; background: var(--pop); box-shadow: 14px 0 0 var(--sun); margin-right: 22px;
+  vertical-align: 1px; }
+@media (max-width: 640px) {
+  .banner img { height: 170px; }
+  .banner.short img { height: 130px; }
+}
+
+/* selected publications: a thumbnail of each paper's robot or task */
+.pub.has-thumb { grid-template-columns: 150px 1fr; gap: 0 18px; align-items: start; }
+.pub .thumb { width: 150px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px;
+  border: 1px solid var(--rule); background: var(--surface); display: block; }
+@media (max-width: 640px) {
+  .pub.has-thumb { grid-template-columns: 96px 1fr; gap: 0 12px; }
+  .pub .thumb { width: 96px; }
+}
