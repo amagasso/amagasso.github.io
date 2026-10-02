@@ -129,6 +129,8 @@ def venue(e: dict) -> str:
         return v
     if t == "phdthesis":
         return f"PhD thesis, {html.escape(latex_to_text(e.get('school', '')))}"
+    if t == "misc" and e.get("eprint"):
+        return f"<em>arXiv preprint</em> arXiv:{html.escape(e['eprint'])}"
     v = f"<em>{html.escape(latex_to_text(e.get('booktitle', '')))}</em>"
     if e.get("pages"):
         v += f", {latex_to_text(e['pages'])}"
